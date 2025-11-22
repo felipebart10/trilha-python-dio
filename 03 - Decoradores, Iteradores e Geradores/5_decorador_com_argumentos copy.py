@@ -16,4 +16,4 @@ def ola_mundo(nome, outro_argumento):
 
 resultado = ola_mundo("João", 1000)
 print(resultado)
-print(ola_mundo)
+print(ola_mundo.__name__)

@@ -1,18 +1,26 @@
 import textwrap
 from abc import ABC, abstractclassmethod, abstractproperty
 from datetime import datetime
+import functools
 
 
 class ContaIterador:
     def __init__(self, contas):
+        self.contas = contas
+        self.contador = 0
         pass
 
     def __iter__(self):
-        pass
+        return self
 
     def __next__(self):
-        pass
-
+        try:
+            conta = self.contas[self.contador]
+            print("=" * 100)
+            self.contador += 1
+            return textwrap.dedent(str(conta))
+        except IndexError:
+            raise StopIteration
 
 class Cliente:
     def __init__(self, endereco):
@@ -145,7 +153,11 @@ class Historico:
         )
 
     def gerar_relatorio(self, tipo_transacao=None):
-        pass
+        for transacao in self._transacoes:
+            if transacao.get("tipo") == tipo_transacao:
+                yield transacao
+            if tipo_transacao is None:
+                yield transacao
 
 
 class Transacao(ABC):
@@ -190,7 +202,12 @@ class Deposito(Transacao):
 
 
 def log_transacao(func):
-    pass
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        resultado = func(*args, **kwargs)
+        print(f"Detalhes da operação:\n\Tipo: {func.__name__}\n\Realizada em: {datetime.now().strftime("%Y-%m-%d %H:%M")}")
+        return resultado
+    return wrapper
 
 
 def menu():
@@ -274,7 +291,8 @@ def exibir_extrato(clientes):
 
     print("\n================ EXTRATO ================")
     # TODO: atualizar a implementação para utilizar o gerador definido em Historico
-    transacoes = conta.historico.transacoes
+    tipo = input("Caso deseje filtrar saques e depósitos, digite 'Saque' ou 'Deposito'. Caso contrário deixe em branco")
+    transacoes = conta.historico.gerar_relatorio(tipo)
 
     extrato = ""
     if not transacoes:
@@ -325,10 +343,8 @@ def criar_conta(numero_conta, clientes, contas):
 
 
 def listar_contas(contas):
-    # TODO: alterar implementação, para utilizar a classe ContaIterador
-    for conta in contas:
-        print("=" * 100)
-        print(textwrap.dedent(str(conta)))
+    for conta in ContaIterador(contas):
+        print(conta)
 
 
 def main():
