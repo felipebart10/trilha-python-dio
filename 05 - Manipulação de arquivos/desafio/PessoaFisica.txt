@@ -1,0 +1,1 @@
+{'endereco': 'Rua X', 'contas': [], 'indice_conta': 0, 'nome': 'Zé', 'data_nascimento': '01-01-2020', 'cpf': '123', 'created_at': '2025-11-25 20:25:53'}
