@@ -1,0 +1,1 @@
+{'_saldo': 0, '_numero': 1, '_agencia': '0001', '_cliente': <PessoaFisica: ('123')>, '_historico': <__main__.Historico object at 0x77f052ab8880>, '_limite': 500, '_limite_saques': 50, 'created_at': '2025-11-25 20:26:07'}
